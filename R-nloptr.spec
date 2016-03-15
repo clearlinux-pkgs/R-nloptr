@@ -4,7 +4,7 @@
 #
 Name     : R-nloptr
 Version  : 1.0.4
-Release  : 17
+Release  : 18
 URL      : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Source0  : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Summary  : No detailed summary available
