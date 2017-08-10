@@ -4,7 +4,7 @@
 #
 Name     : R-nloptr
 Version  : 1.0.4
-Release  : 32
+Release  : 33
 URL      : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Source0  : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Summary  : R interface to NLopt
@@ -15,8 +15,10 @@ BuildRequires : clr-R-helpers
 BuildRequires : nlopt-dev
 
 %description
-# nloptr
-[![Build Status](https://travis-ci.org/jyypma/nloptr.svg?branch=master)](https://travis-ci.org/jyypma/nloptr)
+nloptr is an R interface to NLopt. NLopt is a free/open-source library for
+    nonlinear optimization, providing a common interface for a number of
+    different free optimization routines available online as well as original
+    implementations of various other algorithms.
 
 %package lib
 Summary: lib components for the R-nloptr package.
@@ -30,9 +32,15 @@ lib components for the R-nloptr package.
 %setup -q -c -n nloptr
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+export LANG=C
+export SOURCE_DATE_EPOCH=1502395903
 
 %install
 rm -rf %{buildroot}
+export SOURCE_DATE_EPOCH=1502395903
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
@@ -42,15 +50,33 @@ export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export LDFLAGS="$LDFLAGS  -Wl,-z -Wl,relro"
 mkdir -p %{buildroot}/usr/lib64/R/library
-R CMD INSTALL --install-tests --build  -l %{buildroot}/usr/lib64/R/library nloptr
+
+mkdir -p ~/.R
+mkdir -p ~/.stash
+echo "CFLAGS = $CFLAGS -march=haswell -ftree-vectorize " > ~/.R/Makevars
+echo "FFLAGS = $FFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
+echo "CXXFLAGS = $CXXFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
+R CMD INSTALL --install-tests --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library nloptr
+for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx2 ; mv $i.avx2 ~/.stash/; done
+echo "CFLAGS = $CFLAGS -march=skylake-avx512 -ftree-vectorize " > ~/.R/Makevars
+echo "FFLAGS = $FFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
+echo "CXXFLAGS = $CXXFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
+R CMD INSTALL --preclean --install-tests --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library nloptr
+for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx512 ; mv $i.avx512 ~/.stash/; done
+echo "CFLAGS = $CFLAGS -ftree-vectorize " > ~/.R/Makevars
+echo "FFLAGS = $FFLAGS -ftree-vectorize " >> ~/.R/Makevars
+echo "CXXFLAGS = $CXXFLAGS -ftree-vectorize " >> ~/.R/Makevars
+R CMD INSTALL --preclean --install-tests --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library nloptr
+cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
 %{__rm} -rf %{buildroot}%{_datadir}/R/library/R.css
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export _R_CHECK_FORCE_SUGGESTS_=false
 R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/library nloptr
+cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
 
 
 %files
@@ -59,6 +85,7 @@ R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/lib
 /usr/lib64/R/library/nloptr/DESCRIPTION
 /usr/lib64/R/library/nloptr/INDEX
 /usr/lib64/R/library/nloptr/Meta/Rd.rds
+/usr/lib64/R/library/nloptr/Meta/features.rds
 /usr/lib64/R/library/nloptr/Meta/hsearch.rds
 /usr/lib64/R/library/nloptr/Meta/links.rds
 /usr/lib64/R/library/nloptr/Meta/nsInfo.rds
@@ -84,3 +111,5 @@ R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/lib
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/R/library/nloptr/libs/nloptr.so
+/usr/lib64/R/library/nloptr/libs/nloptr.so.avx2
+/usr/lib64/R/library/nloptr/libs/nloptr.so.avx512
