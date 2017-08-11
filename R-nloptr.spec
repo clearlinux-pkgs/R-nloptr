@@ -4,7 +4,7 @@
 #
 Name     : R-nloptr
 Version  : 1.0.4
-Release  : 34
+Release  : 35
 URL      : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Source0  : http://cran.r-project.org/src/contrib/nloptr_1.0.4.tar.gz
 Summary  : R interface to NLopt
@@ -36,11 +36,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1502410651
+export SOURCE_DATE_EPOCH=1502413199
 
 %install
 rm -rf %{buildroot}
-export SOURCE_DATE_EPOCH=1502410651
+export SOURCE_DATE_EPOCH=1502413199
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
