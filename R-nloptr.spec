@@ -4,25 +4,26 @@
 #
 Name     : R-nloptr
 Version  : 1.2.1
-Release  : 54
+Release  : 55
 URL      : https://cran.r-project.org/src/contrib/nloptr_1.2.1.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/nloptr_1.2.1.tar.gz
 Summary  : R Interface to NLopt
 Group    : Development/Tools
 License  : LGPL-2.1 LGPL-3.0 MIT zlib-acknowledgement
 Requires: R-nloptr-lib = %{version}-%{release}
-Requires: R-assertthat
-Requires: R-inline
+Requires: R-markdown
 BuildRequires : R-assertthat
 BuildRequires : R-inline
+BuildRequires : R-markdown
 BuildRequires : buildreq-R
 BuildRequires : nlopt-dev
 
 %description
-Solve optimization problems using an R interface to NLopt. NLopt is a 
-    free/open-source library for nonlinear optimization, providing a common
-    interface for a number of different free optimization routines available
-    online as well as original implementations of various other algorithms.
+This is my implementation of the "Multi-Level Single-Linkage" (MLSL)
+algorithm for global optimization by random local optimizations (a
+multistart algorithm with "clustering" to avoid repeated detection of
+the same local minimum), modified to optionally use a Sobol'
+low-discrepancy sequence (LDS) instead of pseudorandom numbers.  See:
 
 %package lib
 Summary: lib components for the R-nloptr package.
@@ -40,11 +41,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1538560108
+export SOURCE_DATE_EPOCH=1552793687
 
 %install
+export SOURCE_DATE_EPOCH=1552793687
 rm -rf %{buildroot}
-export SOURCE_DATE_EPOCH=1538560108
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
@@ -79,8 +80,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export _R_CHECK_FORCE_SUGGESTS_=false
-R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/library nloptr|| : 
-cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
+R CMD check --no-manual --no-examples --no-codoc  nloptr || :
 
 
 %files
@@ -113,10 +113,20 @@ cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
 /usr/lib64/R/library/nloptr/include/nlopt.h
 /usr/lib64/R/library/nloptr/include/nlopt.hpp
 /usr/lib64/R/library/nloptr/include/nloptrAPI.h
-/usr/lib64/R/library/nloptr/libs/symbols.rds
+/usr/lib64/R/library/nloptr/tests/test-all.R
+/usr/lib64/R/library/nloptr/tests/testthat/options.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-C-api.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-banana-global.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-banana.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-derivative-checker.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-example.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-hs023.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-hs071.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-options-maxtime.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-parameters.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-simple.R
+/usr/lib64/R/library/nloptr/tests/testthat/test-systemofeq.R
 
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/R/library/nloptr/libs/nloptr.so
-/usr/lib64/R/library/nloptr/libs/nloptr.so.avx2
-/usr/lib64/R/library/nloptr/libs/nloptr.so.avx512
