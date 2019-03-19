@@ -4,14 +4,13 @@
 #
 Name     : R-nloptr
 Version  : 1.2.1
-Release  : 56
+Release  : 57
 URL      : https://cran.r-project.org/src/contrib/nloptr_1.2.1.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/nloptr_1.2.1.tar.gz
 Summary  : R Interface to NLopt
 Group    : Development/Tools
 License  : LGPL-2.1 LGPL-3.0 MIT zlib-acknowledgement
 Requires: R-nloptr-lib = %{version}-%{release}
-Requires: R-markdown
 BuildRequires : R-assertthat
 BuildRequires : R-inline
 BuildRequires : R-markdown
@@ -41,10 +40,10 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1552793687
+export SOURCE_DATE_EPOCH=1552958897
 
 %install
-export SOURCE_DATE_EPOCH=1552793687
+export SOURCE_DATE_EPOCH=1552958897
 rm -rf %{buildroot}
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
