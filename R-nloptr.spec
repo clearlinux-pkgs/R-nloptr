@@ -4,7 +4,7 @@
 #
 Name     : R-nloptr
 Version  : 1.2.2.1
-Release  : 65
+Release  : 66
 URL      : https://cran.r-project.org/src/contrib/nloptr_1.2.2.1.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/nloptr_1.2.2.1.tar.gz
 Summary  : R Interface to NLopt
@@ -15,11 +15,10 @@ BuildRequires : buildreq-R
 BuildRequires : nlopt-dev
 
 %description
-This is my implementation of the "Multi-Level Single-Linkage" (MLSL)
-algorithm for global optimization by random local optimizations (a
-multistart algorithm with "clustering" to avoid repeated detection of
-the same local minimum), modified to optionally use a Sobol'
-low-discrepancy sequence (LDS) instead of pseudorandom numbers.  See:
+Solve optimization problems using an R interface to NLopt. NLopt is a 
+    free/open-source library for nonlinear optimization, providing a common
+    interface for a number of different free optimization routines available
+    online as well as original implementations of various other algorithms.
 
 %package lib
 Summary: lib components for the R-nloptr package.
@@ -31,21 +30,22 @@ lib components for the R-nloptr package.
 
 %prep
 %setup -q -c -n nloptr
+cd %{_builddir}/nloptr
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1583972384
+export SOURCE_DATE_EPOCH=1589507723
 
 %install
-export SOURCE_DATE_EPOCH=1583972384
+export SOURCE_DATE_EPOCH=1589507723
 rm -rf %{buildroot}
 export LANG=C.UTF-8
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -O3 -flto -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -O3 -flto -fno-semantic-interposition "
 export CXXFLAGS="$CXXFLAGS -O3 -flto -fno-semantic-interposition "
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
