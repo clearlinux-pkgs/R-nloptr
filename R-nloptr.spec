@@ -4,7 +4,7 @@
 #
 Name     : R-nloptr
 Version  : 1.2.2.2
-Release  : 72
+Release  : 73
 URL      : https://cran.r-project.org/src/contrib/nloptr_1.2.2.2.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/nloptr_1.2.2.2.tar.gz
 Summary  : R Interface to NLopt
